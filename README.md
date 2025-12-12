@@ -18,7 +18,7 @@ $ conda activate mini-rag
 ```
 ### (optional) Setup your command line interface for better readability 
 ```bash
-export PS1 ="\[\033[01;32m\]\u@\h:\w\n\[\033[00m\]\$ "
+export PS1="\[\033[01;32m\]\u@\h:\w\n\[\033[00m\]\$ "
 ```
 ### install the required packges 
 ```bash
@@ -29,3 +29,9 @@ $ pip install -r requirement.txt
 $cp .env.example .env
 ```
 set your environment variables in the `.env` file. Like `OPENAI_API_KEY` value.
+
+### run fastapi server 
+```bash
+$ uvicorn main:app --reload --host 0.0.0.0 --port 5000
+```
+
