@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, Depends, UploadFile, status # type: ignore
+from fastapi import FastAPI, APIRouter, Depends, UploadFile, status,  Request # type: ignore
 from fastapi.responses import JSONResponse # type: ignore
 import os
 from helpers.config import get_settings,Settings
@@ -8,6 +8,7 @@ from models import ResponseSignal
 import logging
 from .schemes import ProcessRequest
 from controllers import ProcessController
+from models.ProjectModel import ProjectModel
 
 
 logger = logging.getLogger('uvicorn.error')
@@ -19,9 +20,15 @@ data_router = APIRouter(
 )
 
 @data_router.post("/upload/{project_id}")
-async def upload_data(project_id: str, file: UploadFile, 
+async def upload_data(request: Request, project_id: str, file: UploadFile, 
                       app_settings: Settings =Depends(get_settings)):
-    
+    project_model = ProjectModel(
+        db_client  = request.app.db_client
+    )
+    project = await project_model.get_project_or_create_one(
+        project_id = project_id,
+
+    )
     # Validate the uploaded file
     Data_controller = DataController()
     is_valid, message = Data_controller.validate_uploaded_file(file=file)
@@ -52,6 +59,8 @@ async def upload_data(project_id: str, file: UploadFile,
             content={
                 "message": ResponseSignal.FILE_UPLOAD_SUCCESS.value
                 ,"file_id": file_id
+                , "project_id": str(project.id)
+
                 }
         )
 @data_router.post("/process/{project_id}")
@@ -75,3 +84,4 @@ async def process_endpoint(project_id: str, process_request: ProcessRequest):
             content={"message": ResponseSignal.FILE_PROCESSING_FAILURE.value}
         )
     return file_chunks 
+
