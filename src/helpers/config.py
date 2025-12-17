@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict #type: ignore
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     APP_NAME: str
@@ -10,8 +10,12 @@ class Settings(BaseSettings):
     MONGODB_URI: str
     MONGODB_DATABASE: str
 
-    class Config:
-        env_file = ".env"
+    # NEW: Use model_config with SettingsConfigDict
+    model_config = SettingsConfigDict(
+        env_file=".env",
+
+        extra="ignore"  # Ignores extra fields in the .env file
+    )
 
 def get_settings():
     return Settings()
