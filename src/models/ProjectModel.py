@@ -24,9 +24,9 @@ class ProjectModel(BaseDataModel):
         return Project(**record)
     
     async def get_all_projects(self, page: int =1, page_size: int=10):
-        total_documrnts = await self.collection.count_documents({})
-        total_pages = total_documrnts//page_size
-        if total_documrnts%page_size >0:
+        total_documents = await self.collection.count_documents({})
+        total_pages = total_documents//page_size
+        if total_documents%page_size >0:
             total_pages += 1
         cursor = self.collection.find().skip((page-1)*page_size).limit(page_size)
         projects = []
