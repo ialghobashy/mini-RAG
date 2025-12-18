@@ -1,0 +1,10 @@
+
+# These commands to remove all docker containers in development stage if needed
+sudo docker stop $(sudo docker ps -aq)
+sudo docker rm $(sudo docker ps -aq)
+sudo docker rmi $(sudo docker images -q)
+sudo docker volume rm $(sudo docker volume ls -q)
+sudo docker system prune --all
+
+# Then start your service
+
