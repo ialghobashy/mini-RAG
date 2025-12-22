@@ -2,7 +2,7 @@ from pydantic import BaseModel # type: ignore
 from typing import Optional
 
 class ProcessRequest(BaseModel):
-    file_id: str
+    file_id: str = None
     chunk_size: Optional[int] = 100  # default chunk size
     overlap_size: Optional[int] = 20  # default overlap size
     do_reset: Optional[int] = 0
